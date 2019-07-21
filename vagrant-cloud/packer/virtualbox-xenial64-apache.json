@@ -1,0 +1,37 @@
+{
+  "variables": {
+    "vagrant_cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "version": "1.0.{{timestamp}}"
+  },
+  "builders": [
+    {
+      "type": "vagrant",
+      "communicator": "ssh",
+      "source_path": "ubuntu/xenial64",
+      "provider": "virtualbox",
+      "add_force": true,
+      "output_dir": "builds"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["sudo apt-get install -y python"]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "./provision/install-apache.yml"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "jarfernandez/xenial64-apache",
+        "access_token": "{{user `vagrant_cloud_token`}}",
+        "version": "{{user `version`}}",
+        "version_description": "{{user `version_description`}}"
+      }
+    ]
+  ]
+}

@@ -1,0 +1,21 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+
+  config.vm.provision "sh1", type: "shell", inline: "echo Hola mundo"
+
+  config.vm.provision "sh2", type: "shell" do |s|
+    s.inline= <<-SHELL
+      apt-get update
+      apt-get install -y apache2
+    SHELL
+  end
+
+  config.vm.provision "sh3", type: "shell", inline: $script
+
+  config.vm.provision "sh4", type: "shell", path: "script_provision.sh"
+end
+
+$script = <<-SCRIPT
+  echo Provisionando...
+  date >> fecha_hora_provision.log
+SCRIPT

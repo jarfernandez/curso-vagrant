@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "vagrant_cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+    "version": "1.0.{{timestamp}}"
+  },
+  "builders": [{
+    "type": "amazon-ebs",
+    "access_key": "{{user `aws_access_key`}}",
+    "secret_key": "{{user `aws_secret_key`}}",
+    "region": "eu-west-1",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+        "root-device-type": "ebs"
+      },
+      "owners": ["099720109477"],
+
+      "most_recent": true
+    },
+    "instance_type": "t2.micro",
+    "ssh_username": "ubuntu",
+    "ami_name": "xenial64-apache {{timestamp}}"
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["sudo apt-get install -y python"]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "./provision/install-apache.yml"
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "vagrant",
+        "output": "builds/{{.Provider}}-xenial64-apache.box"
+      },
+      {
+        "type": "vagrant-cloud",
+        "box_tag": "jarfernandez/xenial64-apache",
+        "access_token": "{{user `vagrant_cloud_token`}}",
+        "version": "{{user `version`}}",
+        "version_description": "{{user `version_description`}}"
+      }
+    ]
+  ]
+}

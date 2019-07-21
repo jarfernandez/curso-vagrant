@@ -1,0 +1,14 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/trusty64"
+
+  config.push.define "local-exec" do |push|
+    push.inline = <<-SCRIPT
+      scp -r src/ ubuntu@ec2-63-33-57-22.eu-west-1.compute.amazonaws.com:/home/ubuntu/src
+    SCRIPT
+
+    #push.script = "copy_src.sh"
+  end
+end

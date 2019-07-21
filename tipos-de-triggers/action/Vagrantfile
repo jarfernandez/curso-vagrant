@@ -1,0 +1,7 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+
+  config.trigger.before :"Vagrant::Action::Builtin::GracefulHalt", type: :action do |trigger|
+    trigger.warn = "Vagrant está deteniendo la máquina huésped..."
+  end
+end

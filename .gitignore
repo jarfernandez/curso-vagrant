@@ -1,0 +1,5 @@
+*.box
+.vagrant
+*.log
+providers/aws/setenv.sh
+providers/digitalocean/setenv.sh

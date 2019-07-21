@@ -1,0 +1,11 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+
+  config.trigger.before :provisioner_run, type: :hook do |trigger|
+    trigger.info = "Antes de la provisión"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "Provision en la máquina huésped"
+  SHELL
+end

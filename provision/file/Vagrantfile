@@ -1,0 +1,9 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+
+  config.vm.provision "file", source: "fichero.txt", destination: "fichero.txt"
+
+  config.vm.provision "file",
+    source: "directorio",
+    destination: "$HOME/directorio_remoto_no_existe/directorio"
+end

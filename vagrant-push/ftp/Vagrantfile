@@ -1,0 +1,14 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/trusty64"
+
+  config.push.define "ftp" do |push|
+    push.host = "ec2-34-246-160-116.eu-west-1.compute.amazonaws.com"
+    push.username = "ubuntu"
+    push.secure = "true"
+    push.dir = "./src"
+    push.destination = "/home/ubuntu/src"
+  end
+end

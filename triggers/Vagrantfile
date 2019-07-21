@@ -1,0 +1,25 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+
+  config.trigger.before :halt do |trigger|
+    trigger.info = "Se va a detener la máquina Vagrant"
+    # Ejemplos run_remote
+    trigger.run_remote = {inline: "echo \"Desde inline...\" && date >> fecha_hora_parada.log"}
+    # trigger.run_remote = {inline: $script}
+    # trigger.run_remote = {path: "script_before_halt.sh", args: "fecha_hora_parada.log"}
+
+    # Ejemplos run
+    # trigger.run = {inline: "/bin/bash -c 'date >> fecha_hora_parada.log'"}
+    # trigger.run = {inline: $script_local}
+    # trigger.run = {path: "script_before_halt.sh", args: "fecha_hora_parada.log"}
+  end
+end
+
+$script = <<-SCRIPT
+  echo "Desde bloque de shell..."
+  date >> fecha_hora_parada.log
+SCRIPT
+
+$script_local = <<-SCRIPT
+  /bin/bash -c 'date >> fecha_hora_parada.log'
+SCRIPT
